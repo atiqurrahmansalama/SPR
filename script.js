@@ -129,7 +129,7 @@ function showAC() {
     dd.innerHTML = m
         .map(
             (n) =>
-                `<div class="ac-item" onmousedown="pickName(${JSON.stringify(n)})">${n}</div>`,
+                `<div class="ac-item" onmousedown='pickName(${JSON.stringify(n)})'>${n}</div>`,
         )
         .join("");
     dd.classList.add("show");
