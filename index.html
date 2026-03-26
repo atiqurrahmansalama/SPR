@@ -1,302 +1,647 @@
 <!doctype html>
-<html lang="en">
-
-<head>
+<html lang="en" data-theme="classic" data-dark="0">
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SPR Note</title>
+    <!-- Google Fonts: Amiri (Arabic-style serif), Lora (elegant serif), DM Sans (clean sans) -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"
-        rel="stylesheet" />
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
+      href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- ══════════════════════════════════════════
+       STICKY HEADER
+    ═══════════════════════════════════════════ -->
     <header class="app-header">
-        <div class="app-name">
-            <div class="app-name-icon">📋</div>
-            SPR Note
+      <div class="app-name">
+        <div class="app-name-icon">📋</div>
+        SPR Note
+      </div>
+      <div class="header-right">
+        <!-- Theme color dots — quick switcher -->
+        <div class="theme-picker" title="Switch theme">
+          <div
+            class="theme-dot active"
+            data-t="classic"
+            onclick="setTheme('classic')"
+            title="Classic Green"
+          ></div>
+          <div
+            class="theme-dot"
+            data-t="minimal"
+            onclick="setTheme('minimal')"
+            title="Minimal Slate"
+          ></div>
+          <div
+            class="theme-dot"
+            data-t="amber"
+            onclick="setTheme('amber')"
+            title="Warm Amber"
+          ></div>
         </div>
-        <div class="header-right">
-            <button class="icon-btn" onclick="resetForm()" data-tip="Reset Form" title="Reset Form">
-                ↺
-            </button>
-            <button class="icon-btn" onclick="openSettings()" data-tip="Settings" title="Settings">
-                ⚙
-            </button>
-        </div>
+        <!-- Dark mode toggle button in header -->
+        <button
+          class="icon-btn"
+          onclick="toggleDark()"
+          data-tip="Dark Mode"
+          title="Toggle Dark Mode"
+          id="dark-btn"
+        >
+          🌙
+        </button>
+        <!-- Reset form button -->
+        <button
+          class="icon-btn"
+          onclick="resetForm()"
+          data-tip="Reset (Alt+R)"
+          title="Reset Form (Alt+R)"
+        >
+          ↺
+        </button>
+        <!-- Settings panel button -->
+        <button
+          class="icon-btn"
+          onclick="openSettings()"
+          data-tip="Settings (Alt+S)"
+          title="Settings (Alt+S)"
+        >
+          ⚙
+        </button>
+      </div>
     </header>
 
+    <!-- ══════════════════════════════════════════
+       MAIN CONTENT
+  ══════════════════════════════════════════ -->
     <div class="main">
-        <div class="report-title-block">
-            <span class="report-ornament">— ✦ —</span>
-            <div class="report-title">Student Daily Progress Report</div>
-            <div class="report-divider">
-                <div class="report-divider-dot"></div>
-            </div>
-            <div class="report-date-row">
-                <span class="report-date-label">Date</span>
-                <span class="report-date-val" id="current-date">—</span>
-            </div>
+      <!-- Report title & auto-date -->
+      <div class="report-title-block">
+        <span class="report-ornament">— ✦ —</span>
+        <div class="report-title">Student Daily Progress Report</div>
+        <div class="report-divider"><div class="report-divider-dot"></div></div>
+        <div class="report-date-row">
+          <span class="report-date-label">Date</span>
+          <span class="report-date-val" id="current-date">—</span>
         </div>
+      </div>
 
-        <!-- Student Info -->
-        <div class="card">
-            <div class="field-row">
-                <div class="field-label">Student</div>
-                <div class="autocomplete-wrap">
-                    <input type="text" class="field-input" id="student-name" placeholder="Enter student name…"
-                        autocomplete="off"
-                        title="Type name — autocomplete from saved list (↑↓ to navigate, Enter to select)"
-                        oninput="showAC()" onfocus="showAC()" onblur="hideAC()" onkeydown="acKeyDown(event)" />
-                    <div class="ac-dropdown" id="ac-dropdown"></div>
-                </div>
-            </div>
-            <div class="field-row">
-                <div class="field-label">Juz No.</div>
-                <input type="number" class="field-input num-input" id="juz-num" min="1" max="30" placeholder="1–30"
-                    title="Juz number 1 to 30" oninput="onJuzChange()" />
-                <span class="page-hint" id="juz-hint" style="flex: 1"></span>
-            </div>
-            <div class="field-row">
-                <div class="field-label">Page No.</div>
-                <input type="text" class="field-input num-input" id="page-num" placeholder="—"
-                    title="Page number within the Juz" oninput="onPageChange()" />
-                <span class="page-hint" id="page-hint" style="flex: 1">Enter Juz first</span>
-            </div>
+      <!-- ── STUDENT INFO CARD ── -->
+      <div class="card">
+        <div class="field-row">
+          <!-- Student name label; asterisk = required -->
+          <div class="field-label">Student<span class="req">*</span></div>
+          <div class="autocomplete-wrap">
+            <!-- Student name input with autocomplete -->
+            <input
+              type="text"
+              class="field-input"
+              id="student-name"
+              placeholder="Enter student name…"
+              autocomplete="off"
+              oninput="showAC()"
+              onfocus="showAC()"
+              onblur="hideAC()"
+              onkeydown="acKeyDown(event)"
+              title="Student name (↑↓ to navigate, Enter to select)"
+            />
+            <div class="ac-dropdown" id="ac-dropdown"></div>
+          </div>
         </div>
-
-        <!-- Session Summary -->
-        <div class="card card-accent">
-            <div class="section-title">Session Summary</div>
-            <div class="field-row">
-                <div class="field-label">Session</div>
-                <div class="cs-wrap" id="cs-wrap">
-                    <button class="cs-btn" id="cs-btn"
-                        title="Select session type (↑↓ to navigate, Enter to select, Esc to close)" onclick="toggleCS()"
-                        onkeydown="csKeyDown(event)">
-                        <span id="cs-selected" style="color: var(--text-light); font-style: italic">Select
-                            session…</span>
-                        <span class="cs-arrow">▾</span>
-                    </button>
-                    <div class="cs-dropdown" id="cs-dropdown"></div>
-                </div>
-            </div>
-            <div class="summary-row">
-                <div class="count-badge" title="Total mistake count (auto-calculated from entries below)">
-                    <div class="count-info">
-                        <span class="count-label">Mistake</span>
-                        <span class="count-val" id="mistake-count">0</span>
-                    </div>
-                    <span class="count-icon">✗</span>
-                </div>
-                <div class="count-badge stuck" title="Total stuck count (auto-calculated from entries below)">
-                    <div class="count-info">
-                        <span class="count-label">Stuck</span>
-                        <span class="count-val" id="stuck-count">0</span>
-                    </div>
-                    <span class="count-icon">⏸</span>
-                </div>
-            </div>
+        <!-- Juz + Page multi-row input -->
+        <div class="field-row" style="align-items: flex-start">
+          <div class="field-label" style="padding-top: 9px">Juz / Page</div>
+          <div class="juz-multi-wrap" id="juz-multi-wrap"></div>
         </div>
+        <div style="padding-left: 98px; margin-top: 2px">
+          <!-- Button to add additional Juz rows -->
+          <button
+            class="add-juz-btn"
+            onclick="addJuzRow()"
+            title="Add Juz row (Alt+J)"
+          >
+            ＋ Add Juz
+          </button>
+        </div>
+      </div>
 
-        <!-- Mistake Entries -->
-        <div class="entries-sec" id="mistake-sec">
-            <div class="entries-hdr">
-                <span class="entries-hdr-title">Mistake Detail</span>
-                <span class="entries-pill" id="mistake-pill">0</span>
-            </div>
-            <div class="entries-list" id="mistake-list"></div>
-            <button class="add-entry-btn" onclick="addEntry('mistake')"
-                title="Add mistake row — Enter on Ayah field also adds new row; Tab adds Ayah on same line">
-                <span class="plus-circle">+</span> Add Mistake
+      <!-- ── SESSION SUMMARY CARD ── -->
+      <div class="card card-accent">
+        <div class="section-title">Session Summary</div>
+        <div class="field-row">
+          <div class="field-label">Session<span class="req">*</span></div>
+          <div class="cs-wrap" id="cs-wrap">
+            <!-- Custom session dropdown button -->
+            <button
+              class="cs-btn"
+              id="cs-btn"
+              onclick="toggleCS()"
+              onkeydown="csKeyDown(event)"
+              title="Select session (Space/Enter to open, ↑↓ navigate)"
+            >
+              <span
+                id="cs-selected"
+                style="color: var(--text-light); font-style: italic"
+                >Select session…</span
+              >
+              <span class="cs-arrow">▾</span>
             </button>
+            <div class="cs-dropdown" id="cs-dropdown"></div>
+          </div>
         </div>
-
-        <!-- Stuck Entries -->
-        <div class="entries-sec stuck-sec" id="stuck-sec">
-            <div class="entries-hdr">
-                <span class="entries-hdr-title">Stuck Detail</span>
-                <span class="entries-pill" id="stuck-pill">0</span>
+        <!-- Mistake and Stuck count badges -->
+        <div class="summary-row">
+          <div class="count-badge">
+            <div class="count-info">
+              <span class="count-label">Mistake</span>
+              <span class="count-val" id="mistake-count">0</span>
             </div>
-            <div class="entries-list" id="stuck-list"></div>
-            <button class="add-entry-btn" onclick="addEntry('stuck')"
-                title="Add stuck row — Enter on Ayah field also adds new row; Tab adds Ayah on same line">
-                <span class="plus-circle">+</span> Add Stuck
+            <span class="count-icon">✗</span>
+          </div>
+          <div class="count-badge stuck">
+            <div class="count-info">
+              <span class="count-label">Stuck</span>
+              <span class="count-val" id="stuck-count">0</span>
+            </div>
+            <span class="count-icon">⏸</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MISTAKE DETAIL ENTRIES ── -->
+      <div class="entries-sec" id="mistake-sec">
+        <div class="entries-hdr">
+          <div class="entries-hdr-left">
+            <span class="entries-hdr-title">Mistake Detail</span>
+            <span class="entries-pill" id="mistake-pill">0</span>
+          </div>
+          <!-- Refresh/Reset button — only resets mistake entries -->
+          <button
+            class="entries-reset-btn"
+            onclick="resetSection('mistake')"
+            title="Reset Mistake entries only"
+          >
+            ↺
+          </button>
+        </div>
+        <div class="entries-list" id="mistake-list"></div>
+        <!-- Add a new mistake entry row -->
+        <button
+          class="add-entry-btn"
+          onclick="addEntry('mistake')"
+          title="Add row (Alt+M)"
+        >
+          <span class="plus-circle">+</span> Add Mistake
+        </button>
+      </div>
+
+      <!-- ── STUCK DETAIL ENTRIES ── -->
+      <div class="entries-sec stuck-sec" id="stuck-sec">
+        <div class="entries-hdr">
+          <div class="entries-hdr-left">
+            <span class="entries-hdr-title">Stuck Detail</span>
+            <span class="entries-pill" id="stuck-pill">0</span>
+          </div>
+          <!-- Refresh/Reset button — only resets stuck entries -->
+          <button
+            class="entries-reset-btn"
+            onclick="resetSection('stuck')"
+            title="Reset Stuck entries only"
+          >
+            ↺
+          </button>
+        </div>
+        <div class="entries-list" id="stuck-list"></div>
+        <!-- Add a new stuck entry row -->
+        <button
+          class="add-entry-btn"
+          onclick="addEntry('stuck')"
+          title="Add row (Alt+U)"
+        >
+          <span class="plus-circle">+</span> Add Stuck
+        </button>
+      </div>
+
+      <!-- ── COMMENT CARD ── -->
+      <div class="card">
+        <div class="comment-top">
+          <div class="comment-title">Comment</div>
+          <!-- Saved messages dropdown trigger -->
+          <div class="saved-msg-wrap">
+            <button
+              class="saved-msg-btn"
+              onclick="toggleSavedMsgs()"
+              onkeydown="smKeyDown(event)"
+              title="Saved messages (↑↓ navigate, Enter select)"
+            >
+              Saved Messages ▾
             </button>
+            <div class="saved-msg-dropdown" id="sm-dropdown"></div>
+          </div>
         </div>
+        <!-- Comment textarea — saved messages append here -->
+        <textarea
+          class="comment-ta"
+          id="comment-ta"
+          placeholder="Write a comment… Saved Messages append without overwriting"
+        ></textarea>
 
-        <!-- Comment -->
-        <div class="card">
-            <div class="comment-top">
-                <div class="comment-title">Comment</div>
-                <div class="saved-msg-wrap">
-                    <button class="saved-msg-btn"
-                        title="Pick a saved comment — clicks append to existing text (↑↓ Enter Esc)"
-                        onclick="toggleSavedMsgs()" onkeydown="smKeyDown(event)">
-                        Saved Messages ▾
-                    </button>
-                    <div class="saved-msg-dropdown" id="sm-dropdown"></div>
-                </div>
-            </div>
-            <textarea class="comment-ta" id="comment-ta"
-                placeholder="Write a comment… Saved Messages append without overwriting"></textarea>
+        <!-- Checkbox: include group name when copying -->
+        <div class="copy-group-row">
+          <label>
+            <input
+              type="checkbox"
+              class="copy-group-check"
+              id="include-group-chk"
+              checked
+            />
+            Include group name suffix in copied report
+          </label>
         </div>
+      </div>
 
-        <!-- Footer Buttons -->
-        <div class="footer-btns">
-            <button class="btn btn-reset" title="Clear all fields and start fresh" onclick="resetForm()">
-                ↺ Reset
-            </button>
-            <button class="btn btn-copy" id="copy-btn" title="Copy formatted report to clipboard"
-                onclick="copyReport()">
-                ⧉ Copy Report
-            </button>
-        </div>
+      <!-- ── FOOTER BUTTONS ── -->
+      <div class="footer-btns">
+        <!-- Reset the entire form -->
+        <button
+          class="btn btn-reset"
+          onclick="resetForm()"
+          title="Reset form (Alt+R)"
+        >
+          ↺ Reset
+        </button>
+        <!-- Copy the formatted report to clipboard -->
+        <button
+          class="btn btn-copy"
+          id="copy-btn"
+          onclick="copyReport()"
+          title="Copy report (Alt+C)"
+        >
+          ⧉ Copy Report
+        </button>
+      </div>
 
-        <!-- Copyright -->
-        <div class="app-copyright">
-            <div>
-                <strong>SPR Note</strong> &nbsp;·&nbsp; Hifzul Quran Student Progress
-                Tracker
-            </div>
-            <div>
-                © <span id="copy-year"></span> All rights reserved &nbsp;·&nbsp;
-                Designed for Hifz Teachers
-            </div>
+      <!-- App copyright footer -->
+      <div class="app-copyright">
+        <div>
+          <strong>SPR Note</strong> &nbsp;·&nbsp; Hifzul Quran Student Progress
+          Tracker
         </div>
+        <div>
+          © <span id="copy-year"></span> All rights reserved &nbsp;·&nbsp;
+          Designed for Hifz Teachers
+        </div>
+      </div>
     </div>
 
-    <!-- Settings Modal -->
-    <div class="modal-overlay" id="settings-modal" onclick="onOverlayClick(event)">
-        <div class="settings-panel">
-            <div class="settings-hdr">
-                <div class="settings-title">⚙ Settings</div>
-                <button class="close-btn" onclick="closeSettings()" title="Close (Esc)">
-                    ✕
-                </button>
-            </div>
-            <div class="settings-body">
-                <div class="settings-sec">
-                    <div class="settings-sec-title">Auto Date — Timezone</div>
-                    <select class="tz-select" id="tz-select" onchange="saveTZ()"
-                        title="Date will update according to this timezone">
-                        <option value="America/New_York">🇺🇸 US Eastern (New York)</option>
-                        <option value="America/Chicago">🇺🇸 US Central (Chicago)</option>
-                        <option value="America/Denver">🇺🇸 US Mountain (Denver)</option>
-                        <option value="America/Los_Angeles">
-                            🇺🇸 US Pacific (Los Angeles)
-                        </option>
-                        <option value="America/Phoenix">🇺🇸 US Arizona (Phoenix)</option>
-                        <option value="America/Anchorage">
-                            🇺🇸 US Alaska (Anchorage)
-                        </option>
-                        <option value="Pacific/Honolulu">🇺🇸 US Hawaii (Honolulu)</option>
-                        <option value="Asia/Dhaka">🇧🇩 Bangladesh (Dhaka)</option>
-                        <option value="Asia/Karachi">🇵🇰 Pakistan (Karachi)</option>
-                        <option value="Asia/Kolkata">🇮🇳 India (Kolkata)</option>
-                        <option value="Asia/Dubai">🇦🇪 UAE (Dubai)</option>
-                        <option value="Asia/Riyadh">🇸🇦 Saudi Arabia (Riyadh)</option>
-                        <option value="Europe/London">🇬🇧 UK (London)</option>
-                        <option value="UTC">🌐 UTC</option>
-                    </select>
-                </div>
-
-                <div class="settings-sec">
-                    <div class="settings-sec-title">Student Names</div>
-                    <div id="s-names-list"></div>
-                    <div class="settings-add-row">
-                        <input type="text" class="settings-add-input" id="s-name-input" placeholder="Add student name…"
-                            title="Press Enter to add" />
-                        <button class="btn-xs" onclick="addSavedName()" title="Add name">
-                            Add
-                        </button>
-                    </div>
-                </div>
-
-                <div class="settings-sec">
-                    <div class="settings-sec-title">Session Types</div>
-                    <div id="s-sessions-list"></div>
-                    <div class="settings-add-row">
-                        <input type="text" class="settings-add-input" id="s-session-input"
-                            placeholder="Add session type…" title="Press Enter to add" />
-                        <button class="btn-xs" onclick="addSavedSession()" title="Add session">
-                            Add
-                        </button>
-                    </div>
-                </div>
-
-                <div class="settings-sec">
-                    <div class="settings-sec-title">Saved Comments</div>
-                    <div id="s-comments-list"></div>
-                    <div class="settings-add-row">
-                        <input type="text" class="settings-add-input" id="s-comment-input" placeholder="Add comment…"
-                            title="Press Enter to add" />
-                        <button class="btn-xs" onclick="addSavedComment()" title="Add comment">
-                            Add
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Settings Footer -->
-            <div class="settings-footer">
-                <div class="settings-footer-brand">SPR Note</div>
-                <div class="settings-footer-sub">
-                    Hifzul Quran Student Progress Tracker<br />Built with care for
-                    dedicated Hifz teachers
-                </div>
-                <div class="social-icons">
-                    <a class="social-icon fb" href="#" title="Facebook">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-                        </svg>
-                    </a>
-                    <a class="social-icon ig" href="#" title="Instagram">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                        </svg>
-                    </a>
-                    <a class="social-icon tw" href="#" title="X (Twitter)">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                        </svg>
-                    </a>
-                    <a class="social-icon li" href="#" title="LinkedIn">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z" />
-                            <circle cx="4" cy="4" r="2" />
-                        </svg>
-                    </a>
-                    <a class="social-icon gh" href="#" title="GitHub">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-                        </svg>
-                    </a>
-                    <a class="social-icon yt" href="#" title="YouTube">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.4a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
-                            <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="white" />
-                        </svg>
-                    </a>
-                </div>
-                <div class="settings-footer-copy">
-                    © <span id="settings-copy-year"></span> SPR Note · v2.0
-                </div>
-            </div>
-        </div>
+    <!-- FAB for mobile shortcuts -->
+    <div class="fab-container">
+      <button class="fab-main" onclick="window.toggleFab()">⚡</button>
+      <div class="fab-menu" id="fab-menu">
+        <button
+          class="fab-item"
+          onclick="window.addEntry('mistake')"
+          title="Add Mistake"
+        >
+          📝
+        </button>
+        <button
+          class="fab-item"
+          onclick="window.addEntry('stuck')"
+          title="Add Stuck"
+        >
+          ⏸
+        </button>
+        <button class="fab-item" onclick="window.addJuzRow()" title="Add Juz">
+          📖
+        </button>
+        <button class="fab-item" onclick="window.copyReport()" title="Copy">
+          📋
+        </button>
+      </div>
     </div>
 
+    <!-- ══════════════════════════════════════════
+       SETTINGS MODAL (bottom sheet)
+  ══════════════════════════════════════════ -->
+    <div
+      class="modal-overlay"
+      id="settings-modal"
+      onclick="onOverlayClick(event)"
+    >
+      <div class="settings-panel">
+        <div class="settings-hdr">
+          <div class="settings-title">⚙ Settings</div>
+          <button
+            class="close-btn"
+            onclick="closeSettings()"
+            title="Close (Esc)"
+          >
+            ✕
+          </button>
+        </div>
+        <div class="settings-body">
+          <!-- ── APPEARANCE: Theme + Dark Mode ── -->
+          <div class="settings-sec">
+            <div class="settings-sec-title">Appearance</div>
+            <!-- Theme selector options -->
+            <div class="theme-row">
+              <div
+                class="theme-opt active"
+                data-t="classic"
+                onclick="setTheme('classic')"
+              >
+                <span class="theme-swatch swatch-classic"></span> Classic Green
+              </div>
+              <div
+                class="theme-opt"
+                data-t="minimal"
+                onclick="setTheme('minimal')"
+              >
+                <span class="theme-swatch swatch-minimal"></span> Minimal Slate
+              </div>
+              <div class="theme-opt" data-t="amber" onclick="setTheme('amber')">
+                <span class="theme-swatch swatch-amber"></span> Warm Amber
+              </div>
+            </div>
+            <!-- Dark mode toggle switch -->
+            <div class="dark-toggle-row">
+              <span class="dark-toggle-label">🌙 Dark Mode</span>
+              <label class="toggle-switch">
+                <input
+                  type="checkbox"
+                  id="dark-toggle-chk"
+                  onchange="toggleDarkFromSettings(this)"
+                />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- ── TIMEZONE ── -->
+          <div class="settings-sec">
+            <div class="settings-sec-title">Auto Date — Timezone</div>
+            <select class="tz-select" id="tz-select" onchange="saveTZ()">
+              <option value="America/New_York">🇺🇸 US Eastern (New York)</option>
+              <option value="America/Chicago">🇺🇸 US Central (Chicago)</option>
+              <option value="America/Denver">🇺🇸 US Mountain (Denver)</option>
+              <option value="America/Los_Angeles">
+                🇺🇸 US Pacific (Los Angeles)
+              </option>
+              <option value="America/Phoenix">🇺🇸 US Arizona (Phoenix)</option>
+              <option value="America/Anchorage">
+                🇺🇸 US Alaska (Anchorage)
+              </option>
+              <option value="Pacific/Honolulu">🇺🇸 US Hawaii (Honolulu)</option>
+              <option value="Asia/Dhaka">🇧🇩 Bangladesh (Dhaka)</option>
+              <option value="Asia/Karachi">🇵🇰 Pakistan (Karachi)</option>
+              <option value="Asia/Kolkata">🇮🇳 India (Kolkata)</option>
+              <option value="Asia/Dubai">🇦🇪 UAE (Dubai)</option>
+              <option value="Asia/Riyadh">🇸🇦 Saudi Arabia (Riyadh)</option>
+              <option value="Europe/London">🇬🇧 UK (London)</option>
+              <option value="UTC">🌐 UTC</option>
+            </select>
+          </div>
+
+          <!-- ── STUDENT NAMES (group is required) ── -->
+          <div class="settings-sec">
+            <div class="settings-sec-title">Student Names</div>
+            <div id="s-names-list"></div>
+            <div class="settings-add-row">
+              <!-- Name input -->
+              <input
+                type="text"
+                class="settings-add-input"
+                id="s-name-input"
+                placeholder="Student name…"
+              />
+              <!-- Group input — now required (marked with *) -->
+              <input
+                type="text"
+                class="settings-add-input-sm"
+                id="s-group-input"
+                placeholder="Group name *"
+                title="Group name is required"
+              />
+              <button class="btn-xs" onclick="addSavedName()">Add</button>
+            </div>
+            <div
+              style="font-size: 11px; color: var(--text-light); margin-top: 5px"
+            >
+              * Group name is required for each student.
+            </div>
+          </div>
+
+          <!-- ── SESSION TYPES ── -->
+          <div class="settings-sec">
+            <div class="settings-sec-title">Session Types</div>
+            <div id="s-sessions-list"></div>
+            <div class="settings-add-row">
+              <input
+                type="text"
+                class="settings-add-input"
+                id="s-session-input"
+                placeholder="Add session type…"
+              />
+              <button class="btn-xs" onclick="addSavedSession()">Add</button>
+            </div>
+          </div>
+
+          <!-- ── SAVED COMMENTS ── -->
+          <div class="settings-sec">
+            <div class="settings-sec-title">Saved Comments</div>
+            <div id="s-comments-list"></div>
+            <div class="settings-add-row">
+              <input
+                type="text"
+                class="settings-add-input"
+                id="s-comment-input"
+                placeholder="Add comment…"
+              />
+              <button class="btn-xs" onclick="addSavedComment()">Add</button>
+            </div>
+          </div>
+
+          <!-- ── KEYBOARD SHORTCUTS REFERENCE ── -->
+          <div class="settings-sec">
+            <div class="settings-sec-title">Keyboard Shortcuts</div>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 6px 16px;
+                font-size: 12px;
+                color: var(--text-muted);
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                "
+              >
+                <span>Copy Report</span><span class="kbd-chip">Alt+C</span>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                "
+              >
+                <span>Reset Form</span><span class="kbd-chip">Alt+R</span>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                "
+              >
+                <span>Settings</span><span class="kbd-chip">Alt+S</span>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                "
+              >
+                <span>Add Juz</span><span class="kbd-chip">Alt+J</span>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                "
+              >
+                <span>Add Mistake</span><span class="kbd-chip">Alt+M</span>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                "
+              >
+                <span>Add Stuck</span><span class="kbd-chip">Alt+U</span>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                "
+              >
+                <span>Dark Mode</span><span class="kbd-chip">Alt+D</span>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                "
+              >
+                <span>Close / Escape</span><span class="kbd-chip">Esc</span>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  grid-column: 1/-1;
+                "
+              >
+                <span>Next Ayah field</span><span class="kbd-chip">Tab</span>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  grid-column: 1/-1;
+                "
+              >
+                <span>New entry row</span><span class="kbd-chip">Enter</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings panel footer with branding -->
+        <div class="settings-footer">
+          <div class="settings-footer-brand">SPR Note</div>
+          <div class="settings-footer-sub">
+            Hifzul Quran Student Progress Tracker<br />Built with care for
+            dedicated Hifz teachers
+          </div>
+          <div class="social-icons">
+            <a class="social-icon fb" href="#" title="Facebook">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
+                />
+              </svg>
+            </a>
+            <a class="social-icon ig" href="#" title="Instagram">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+              </svg>
+            </a>
+            <a class="social-icon tw" href="#" title="X / Twitter">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+                />
+              </svg>
+            </a>
+            <a class="social-icon gh" href="#" title="GitHub">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                />
+              </svg>
+            </a>
+          </div>
+          <div class="settings-footer-copy">
+            © <span id="settings-copy-year"></span> SPR Note · v4.0
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast notification element -->
     <div class="toast" id="toast"></div>
 
+    <!-- Main JavaScript file -->
     <script src="script.js"></script>
-</body>
-
+  </body>
 </html>
