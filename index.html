@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SPR Note — Student Progress Report</title>
+  <title>SPR Note — Hifzul Quran Progress Tracker</title>
   <!-- Google Fonts: Amiri (Arabic-style serif), Lora (elegant serif), DM Sans (clean sans) -->
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <style>
@@ -37,11 +37,8 @@
       --radius: 12px;
       --radius-sm: 7px;
       --radius-xs: 4px;
-      --card-stripe: linear-gradient(180deg,var(--primary),var(--accent));
+      --card-stripe: var(--primary);
     }
-
-    /* ─────────────────────────────────────────────
-       THEME — Classic Green DARK
     ───────────────────────────────────────────── */
     [data-theme="classic"][data-dark="1"] {
       --bg: #0e1a12;
@@ -66,7 +63,7 @@
       --shadow-sm: 0 1px 3px rgba(0,0,0,.3),0 2px 8px rgba(0,0,0,.2);
       --shadow: 0 2px 6px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.2);
       --shadow-lg: 0 8px 30px rgba(0,0,0,.5);
-      --card-stripe: linear-gradient(180deg,var(--primary),var(--accent));
+      --card-stripe: var(--primary);
     }
 
     /* ─────────────────────────────────────────────
@@ -95,7 +92,7 @@
       --shadow-sm: 0 1px 3px rgba(74,108,247,.08),0 2px 8px rgba(74,108,247,.04);
       --shadow: 0 2px 6px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.04);
       --shadow-lg: 0 8px 30px rgba(0,0,0,.12);
-      --card-stripe: linear-gradient(180deg,var(--primary),var(--accent));
+      --card-stripe: var(--primary);
     }
 
     /* ─────────────────────────────────────────────
@@ -124,7 +121,7 @@
       --shadow-sm: 0 1px 3px rgba(0,0,0,.4);
       --shadow: 0 2px 6px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.3);
       --shadow-lg: 0 8px 30px rgba(0,0,0,.6);
-      --card-stripe: linear-gradient(180deg,var(--primary),var(--accent));
+      --card-stripe: var(--primary);
     }
 
     /* ─────────────────────────────────────────────
@@ -153,7 +150,7 @@
       --shadow-sm: 0 1px 3px rgba(200,134,10,.08);
       --shadow: 0 2px 6px rgba(0,0,0,.07),0 4px 14px rgba(0,0,0,.05);
       --shadow-lg: 0 8px 30px rgba(0,0,0,.14);
-      --card-stripe: linear-gradient(180deg,var(--primary),var(--accent));
+      --card-stripe: var(--primary);
     }
 
     /* ─────────────────────────────────────────────
@@ -182,7 +179,7 @@
       --shadow-sm: 0 1px 3px rgba(0,0,0,.4);
       --shadow: 0 2px 6px rgba(0,0,0,.4);
       --shadow-lg: 0 8px 30px rgba(0,0,0,.6);
-      --card-stripe: linear-gradient(180deg,var(--primary),var(--accent));
+      --card-stripe: var(--primary);
     }
 
     /* ─────────────────────────────────────────────
@@ -394,12 +391,9 @@
       width: 3px;
       background: var(--card-stripe);
       border-radius: 0 3px 3px 0;
-      opacity: .55;
+      opacity: .7;
     }
-    /* Alternate stripe direction for accent cards */
-    .card-accent::before {
-      background: linear-gradient(180deg, var(--accent), var(--primary));
-    }
+    /* Accent cards use same stripe as all cards */
 
     /* ─────────────────────────────────────────────
        FIELD ROWS — Label + Input pairs
@@ -610,7 +604,17 @@
     .page-tab-input:focus { border-color: var(--border-focus); background: var(--surface); }
     .page-tab-input::-webkit-inner-spin-button,
     .page-tab-input::-webkit-outer-spin-button { -webkit-appearance: none; }
-    .page-tab-hint { font-size: 10px; color: var(--text-light); }
+    .page-tab-hint {
+      font-size: 10px; color: var(--primary);
+      background: var(--primary-light);
+      border: 1px solid var(--primary-mid);
+      border-radius: 10px;
+      padding: 1px 8px;
+      font-weight: 700;
+      letter-spacing: .2px;
+      white-space: nowrap;
+    }
+    .page-tab-hint:empty { display: none; }
     /* Delete button for extra juz rows */
     .juz-del-btn {
       background: none; border: none;
@@ -1537,36 +1541,124 @@
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
     /* ─────────────────────────────────────────────
-       RESPONSIVE — Tablet & Mobile
+       RESPONSIVE — Tablet & Mobile (comprehensive)
     ───────────────────────────────────────────── */
-    @media (max-width: 600px) {
-      /* Tighter padding on small screens */
-      .main { padding: 0 8px; }
-      .card { padding: 12px 12px; }
-      .report-title { font-size: 18px; }
-      .field-label { min-width: 70px; font-size: 9.5px; }
-      .field-input { font-size: 13px; padding: 7px 9px; }
-      /* Stack footer buttons vertically if very narrow */
-      .footer-btns { flex-direction: column; }
-      /* Adjust count badge for small screens */
-      .count-val { font-size: 22px; }
-      .settings-panel { border-radius: 16px 16px 0 0; }
-      /* Theme picker hidden on very small; use settings instead */
-      .theme-picker { display: none; }
-      /* Header compact */
-      .app-header { padding: 9px 12px; }
-      /* Entries header */
-      .entries-hdr { padding: 9px 12px; }
-      /* Juz row wraps better */
-      .juz-row { gap: 4px; }
-      .juz-num-input { width: 50px; }
-      /* Comment card padding */
-      .settings-body { padding: 12px 14px; }
+
+    /* Tablet: 581px–900px */
+    @media (min-width: 581px) and (max-width: 900px) {
+      .main { max-width: 580px; padding: 0 16px; }
+      .theme-picker { display: flex; }
     }
+
+    /* Mobile: ≤ 600px */
+    @media (max-width: 600px) {
+      /* Layout */
+      .main { padding: 0 8px; }
+      .card { padding: 12px 11px; }
+
+      /* Header */
+      .app-header { padding: 9px 10px; }
+      .app-name { font-size: 15px; gap: 7px; }
+      .app-name-icon { width: 24px; height: 24px; }
+      .header-right { gap: 5px; }
+      .icon-btn { width: 30px; height: 30px; }
+      .theme-picker { display: none; } /* use settings instead */
+
+      /* Report title */
+      .report-title { font-size: 17px; }
+      .report-title-block { padding: 14px 6px 10px; }
+
+      /* Field rows */
+      .field-label { min-width: 68px; font-size: 9.5px; letter-spacing: .5px; }
+      .field-input { font-size: 13px; padding: 7px 9px; }
+
+      /* Juz row */
+      .juz-row { gap: 4px; flex-wrap: wrap; }
+      .juz-num-input { width: 50px; font-size: 13px; padding: 6px 5px; }
+      .juz-page-tabs { flex-wrap: wrap; gap: 4px; }
+      .page-dual-drum { width: 30px; font-size: 12px; }
+      .page-dual-box { height: 30px; }
+      .page-tab-hint { font-size: 9.5px; padding: 1px 6px; }
+      .add-juz-btn { font-size: 11px; padding: 4px 10px; }
+
+      /* Entry rows — mistake/stuck */
+      .entry-row { gap: 4px; }
+      .e-input { width: 46px; font-size: 12px; }
+      .entry-lbl { font-size: 11px; }
+      .entries-hdr { padding: 9px 12px; }
+      .entries-hdr-title { font-size: 14px; }
+      .add-entry-btn { font-size: 12px; padding: 8px 12px; }
+
+      /* Count badges */
+      .count-val { font-size: 22px; }
+      .count-badge { padding: 10px 12px; }
+
+      /* Comment */
+      .comment-ta { font-size: 13px; min-height: 70px; }
+      .saved-msg-btn { font-size: 11px; padding: 4px 8px; }
+      .copy-group-row { padding: 7px 9px; }
+      .copy-group-row label { font-size: 11.5px; }
+
+      /* Footer buttons */
+      .footer-btns { flex-direction: column; gap: 8px; padding-top: 10px; }
+      .btn { padding: 11px 14px; font-size: 14px; }
+
+      /* Settings panel */
+      .settings-panel { border-radius: 16px 16px 0 0; max-height: 88vh; }
+      .settings-hdr { padding: 14px 16px 10px; }
+      .settings-body { padding: 0 14px 4px !important; }
+      .settings-body .settings-sec { padding: 12px 0 10px; }
+
+      /* Section title */
+      .section-title { font-size: 14px; }
+
+      /* Custom session dropdown */
+      .cs-btn { font-size: 13px; padding: 7px 10px; }
+
+      /* Summary row */
+      .summary-row { gap: 8px; margin-top: 10px; }
+
+      /* Autocomplete */
+      .ac-dropdown { max-height: 140px; }
+      .ac-item { padding: 8px 11px; font-size: 13px; }
+
+      /* Save name prompt */
+      .save-name-prompt { min-width: 200px; }
+
+      /* App copyright */
+      .app-copyright { font-size: 10.5px; margin-top: 18px; }
+
+      /* Toast */
+      .toast { font-size: 12px; padding: 9px 18px; bottom: 16px; }
+    }
+
+    /* Small mobile: ≤ 380px */
     @media (max-width: 380px) {
-      .field-label { min-width: 60px; }
+      .main { padding: 0 6px; }
+      .field-label { min-width: 58px; font-size: 9px; }
       .btn { padding: 10px 10px; font-size: 13px; }
-      .count-val { font-size: 20px; }
+      .count-val { font-size: 19px; }
+      .app-name { font-size: 14px; }
+      .juz-num-input { width: 46px; }
+      .page-dual-drum { width: 28px; }
+      .e-input { width: 42px; }
+      .card { padding: 10px 9px; }
+      .entries-hdr { padding: 8px 10px; }
+      .settings-hdr { padding: 12px 14px 9px; }
+    }
+
+    /* Large screens: landscape phones & small tablets ≤ 768px */
+    @media (max-width: 768px) and (orientation: landscape) {
+      .main { padding: 0 12px; }
+      .settings-panel { max-height: 95vh; }
+      .report-title-block { padding: 10px 6px 8px; }
+    }
+
+    /* Touch device: disable hover tooltips */
+    @media (hover: none) {
+      [data-tip]::after { display: none; }
+      .entry-del { opacity: 1 !important; }
+      .sm-del { opacity: 0.6 !important; }
     }
 
     /* ─────────────────────────────────────────────
@@ -1620,7 +1712,7 @@
 
     <!-- Report title & auto-date -->
     <div class="report-title-block">
-      <div class="report-title">Student Daily Progress Report</div>
+      <div class="report-title">Hifz Daily Progress Report</div>
       <div class="report-date-row">
         <span class="report-date-label">Date</span>
         <span class="report-date-val" id="current-date">—</span>
@@ -1671,7 +1763,7 @@
         </div>
       </div>
       <!-- Group name hint shown below student name, aligned with input box -->
-      <div class="field-row"; style="margin-top: -8px; margin-left: 10px;">
+      <div class="field-row" style="margin-top: -8px; margin-left: 10px;">
         <div class="field-label" style="visibility:hidden"></div>
         <div class="student-group-hint" id="student-group-hint" style="flex:1"></div>
       </div>
@@ -1936,10 +2028,12 @@
             <div class="kbd-grid-row"><span>Copy Report</span><span class="kbd-chip">Alt+C</span></div>
             <div class="kbd-grid-row"><span>Reset Form</span><span class="kbd-chip">Alt+R</span></div>
             <div class="kbd-grid-row"><span>Settings</span><span class="kbd-chip">Alt+S</span></div>
-            <div class="kbd-grid-row"><span>Add Juz</span><span class="kbd-chip">Alt+J</span></div>
+            <div class="kbd-grid-row"><span>Saved Messages</span><span class="kbd-chip">Alt+N</span></div>
+            <div class="kbd-grid-row"><span>Add Juz Row</span><span class="kbd-chip">Alt+J</span></div>
             <div class="kbd-grid-row"><span>Add Mistake</span><span class="kbd-chip">Alt+M</span></div>
             <div class="kbd-grid-row"><span>Add Stuck</span><span class="kbd-chip">Alt+U</span></div>
             <div class="kbd-grid-row"><span>Dark Mode</span><span class="kbd-chip">Alt+D</span></div>
+            <div class="kbd-grid-row"><span>Cycle Theme</span><span class="kbd-chip">Alt+T</span></div>
             <div class="kbd-grid-row"><span>Close / Escape</span><span class="kbd-chip">Esc</span></div>
             <div class="kbd-grid-row"><span>Next Ayah field</span><span class="kbd-chip">Tab</span></div>
             <div class="kbd-grid-row"><span>New entry row</span><span class="kbd-chip">Enter</span></div>
@@ -1965,7 +2059,7 @@
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
           </a>
         </div>
-        <div class="settings-footer-copy">© <span id="settings-copy-year"></span> SPR Note · v10.0</div>
+        <div class="settings-footer-copy">© <span id="settings-copy-year"></span> SPR Note · v13.0</div>
       </div>
     </div>
   </div>
@@ -2088,8 +2182,13 @@
       S.dark = chk.checked ? 1 : 0; persist(); applyTheme();
     }
 
+    function cycleTheme() {
+      const themes = ["classic", "minimal", "amber"];
+      const idx = themes.indexOf(S.theme);
+      setTheme(themes[(idx + 1) % themes.length]);
+    }
+
     /* ══════════════════════════════════════════
-       DATE — with timezone abbreviation
     ══════════════════════════════════════════ */
     function updateDate() {
       try {
@@ -2165,8 +2264,10 @@
         });
         juzInp.addEventListener("wheel", (e) => {
           e.preventDefault();
-          let v = parseInt(juzInp.value) || 0;
-          v = e.deltaY < 0 ? Math.min(30, v + 1) : Math.max(1, v - 1);
+          let cur = parseInt(juzInp.value) || 0;
+          let v = e.deltaY < 0 ? cur + 1 : cur - 1;
+          if (v < 1) v = 30;
+          if (v > 30) v = 1;
           juzInp.value = v;
           juzRows[idx].juz = String(v);
           updateEntryJuzSelects();
@@ -2218,7 +2319,7 @@
         }
 
         /* Single dual-drum box per range */
-        const box = makePageRangeInput(pageRange, mx, (start, end) => {
+        const box = makePageRangeInput(pageRange, mx, idx, (start, end) => {
           juzRows[idx].pages[pIdx].start = start;
           juzRows[idx].pages[pIdx].end   = end;
         });
@@ -2269,20 +2370,19 @@
       });
       pageTabs.appendChild(plusBtn);
 
-      /* Max hint */
-      if (mx) {
-        const hint = document.createElement("span");
-        hint.className = "page-tab-hint";
-        hint.textContent = `max ${mx}`;
-        pageTabs.appendChild(hint);
-      }
+      /* Total selected pages hint */
+      const hint = document.createElement("span");
+      hint.className = "page-tab-hint";
+      hint.id = `juz-page-total-hint-${idx}`;
+      pageTabs.appendChild(hint);
+      updatePageTotalHint(idx);
     }
 
     /**
      * Dual-drum page range box — start and end drums in one box.
      * Each drum is scrollable/arrow-key controllable independently.
      */
-    function makePageRangeInput(pageRange, maxVal, onChange) {
+    function makePageRangeInput(pageRange, maxVal, juzIdx, onChange) {
       const TOTAL = maxVal ?? 25;
 
       /* Wrapper box */
@@ -2312,20 +2412,25 @@
       endDrum.title = "End page (scroll ↑↓ or arrow keys)";
       endDrum.value = pageRange.end || "";
 
-      const clamp = (v) => Math.max(1, Math.min(TOTAL, v));
+      /* Circular wrap: goes 1→2→…→TOTAL→1 and TOTAL→TOTAL-1→…→1→TOTAL */
+      const wrap = (v) => {
+        if (v < 1) return TOTAL;
+        if (v > TOTAL) return 1;
+        return v;
+      };
 
       const sync = () => {
         pageRange.start = startDrum.value;
         pageRange.end   = endDrum.value || startDrum.value;
         onChange(pageRange.start, pageRange.end);
+        updatePageTotalHint(juzIdx);
       };
 
       /* Scroll on start drum */
       startDrum.addEventListener("wheel", (e) => {
         e.preventDefault();
-        const cur = parseInt(startDrum.value) || 0;
-        startDrum.value = clamp(e.deltaY < 0 ? cur + 1 : cur - 1);
-        /* If end < start, sync end */
+        const cur = parseInt(startDrum.value) || 1;
+        startDrum.value = wrap(e.deltaY < 0 ? cur + 1 : cur - 1);
         if (endDrum.value && parseInt(endDrum.value) < parseInt(startDrum.value))
           endDrum.value = startDrum.value;
         sync();
@@ -2335,12 +2440,13 @@
       startDrum.addEventListener("keydown", (e) => {
         if (e.key === "ArrowUp") {
           e.preventDefault();
-          const v = clamp((parseInt(startDrum.value) || 0) + 1);
+          const v = wrap((parseInt(startDrum.value) || 0) + 1);
           startDrum.value = v; sync();
         }
         if (e.key === "ArrowDown") {
           e.preventDefault();
-          const v = clamp((parseInt(startDrum.value) || 1) - 1);
+          const cur = parseInt(startDrum.value);
+          const v = isNaN(cur) ? TOTAL : wrap(cur - 1);
           startDrum.value = v; sync();
         }
         if (e.key === "Tab" && !e.shiftKey) {
@@ -2363,8 +2469,8 @@
         e.preventDefault();
         const dy = touchStartY - e.touches[0].clientY;
         if (Math.abs(dy) > 8) {
-          const cur = parseInt(startDrum.value) || 0;
-          startDrum.value = clamp(dy > 0 ? cur + 1 : cur - 1);
+          const cur = parseInt(startDrum.value) || 1;
+          startDrum.value = wrap(dy > 0 ? cur + 1 : cur - 1);
           if (endDrum.value && parseInt(endDrum.value) < parseInt(startDrum.value))
             endDrum.value = startDrum.value;
           sync();
@@ -2375,10 +2481,9 @@
       /* Scroll on end drum */
       endDrum.addEventListener("wheel", (e) => {
         e.preventDefault();
-        const cur = parseInt(endDrum.value) || parseInt(startDrum.value) || 0;
-        const next = clamp(e.deltaY < 0 ? cur + 1 : cur - 1);
+        const cur = parseInt(endDrum.value) || parseInt(startDrum.value) || 1;
+        const next = wrap(e.deltaY < 0 ? cur + 1 : cur - 1);
         endDrum.value = next;
-        /* Don't allow end < start */
         if (startDrum.value && parseInt(endDrum.value) < parseInt(startDrum.value))
           endDrum.value = startDrum.value;
         sync();
@@ -2388,12 +2493,13 @@
       endDrum.addEventListener("keydown", (e) => {
         if (e.key === "ArrowUp") {
           e.preventDefault();
-          const v = clamp((parseInt(endDrum.value) || parseInt(startDrum.value) || 0) + 1);
+          const v = wrap((parseInt(endDrum.value) || parseInt(startDrum.value) || 0) + 1);
           endDrum.value = v; sync();
         }
         if (e.key === "ArrowDown") {
           e.preventDefault();
-          const v = clamp((parseInt(endDrum.value) || parseInt(startDrum.value) || 1) - 1);
+          const cur = parseInt(endDrum.value) || parseInt(startDrum.value) || 1;
+          const v = wrap(cur - 1);
           if (startDrum.value && v < parseInt(startDrum.value)) { endDrum.value = startDrum.value; }
           else endDrum.value = v;
           sync();
@@ -2415,8 +2521,8 @@
         e.preventDefault();
         const dy = touchEndY - e.touches[0].clientY;
         if (Math.abs(dy) > 8) {
-          const cur = parseInt(endDrum.value) || parseInt(startDrum.value) || 0;
-          const next = clamp(dy > 0 ? cur + 1 : cur - 1);
+          const cur = parseInt(endDrum.value) || parseInt(startDrum.value) || 1;
+          const next = wrap(dy > 0 ? cur + 1 : cur - 1);
           endDrum.value = next;
           if (startDrum.value && parseInt(endDrum.value) < parseInt(startDrum.value))
             endDrum.value = startDrum.value;
@@ -2437,6 +2543,22 @@
     }
 
     function updateJuzPageHints(idx) { renderJuzPageTabs(idx); }
+
+    function updatePageTotalHint(idx) {
+      const row = juzRows[idx];
+      if (!row) return;
+      const hint = document.getElementById(`juz-page-total-hint-${idx}`);
+      if (!hint) return;
+      let total = 0;
+      row.pages.forEach(p => {
+        const s = parseInt(p.start);
+        const e = parseInt(p.end || p.start);
+        if (!isNaN(s) && s > 0) {
+          total += (isNaN(e) || e < s) ? 1 : (e - s + 1);
+        }
+      });
+      hint.textContent = total > 0 ? `${total} page${total > 1 ? "s" : ""}` : "";
+    }
 
     function getActiveJuzList() {
       return juzRows.map(r => r.juz).filter(j => j && parseInt(j) >= 1 && parseInt(j) <= 30);
@@ -2697,8 +2819,11 @@
       pageInp.oninput = () => recalc(type);
       pageInp.addEventListener("wheel", (e) => {
         e.preventDefault();
-        let v = parseInt(pageInp.value) || 0;
-        v = e.deltaY < 0 ? v + 1 : Math.max(1, v - 1);
+        const maxP = 25;
+        let cur = parseInt(pageInp.value) || 0;
+        let v = e.deltaY < 0 ? cur + 1 : cur - 1;
+        if (v < 1) v = maxP;
+        if (v > maxP) v = 1;
         pageInp.value = v; recalc(type);
       }, { passive: false });
       pageInp.addEventListener("keydown", (e) => {
@@ -2783,8 +2908,11 @@
       inp.oninput = () => recalc(type);
       inp.addEventListener("wheel", (e) => {
         e.preventDefault();
-        let v = parseInt(inp.value) || 0;
-        v = e.deltaY < 0 ? v + 1 : Math.max(1, v - 1);
+        const maxA = 286;
+        let cur = parseInt(inp.value) || 0;
+        let v = e.deltaY < 0 ? cur + 1 : cur - 1;
+        if (v < 1) v = maxA;
+        if (v > maxA) v = 1;
         inp.value = v; recalc(type);
       }, { passive: false });
       inp.addEventListener("keydown", (e) => {
@@ -2892,9 +3020,9 @@
     function renderSM() {
       const dd = $("sm-dropdown");
       dd.innerHTML = S.savedComments.map((c, i) =>
-        `<div class="sm-item" onclick='pickComment(${JSON.stringify(c)})'>
-          <span class="sm-item-text">${c}</span>
-          <span class="sm-del" onclick="delSavedComment(event,${i})"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+        `<div class="sm-item" data-sm-idx="${i}">
+          <span class="sm-item-text">${c.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</span>
+          <span class="sm-del" data-sm-del="${i}"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
         </div>`
       ).join("") +
       `<div class="sm-add-row">
@@ -2902,6 +3030,16 @@
           onkeydown="if(event.key==='Enter')addCommentInline()">
         <button class="btn-xs" onclick="addCommentInline()">+ Add</button>
       </div>`;
+
+      /* Event delegation — avoids inline-string encoding issues */
+      dd.onclick = (e) => {
+        /* Delete button */
+        const delBtn = e.target.closest("[data-sm-del]");
+        if (delBtn) { e.stopPropagation(); delSavedComment(e, parseInt(delBtn.dataset.smDel)); return; }
+        /* Item click → insert comment */
+        const item = e.target.closest("[data-sm-idx]");
+        if (item) { pickComment(S.savedComments[parseInt(item.dataset.smIdx)]); }
+      };
     }
 
     function toggleSavedMsgs() {
@@ -2935,7 +3073,7 @@
     }
 
     function delSavedComment(e, idx) {
-      e.stopPropagation();
+      if (e && e.stopPropagation) e.stopPropagation();
       S.savedComments.splice(idx, 1);
       persist(); renderSM(); renderCommentsList();
     }
@@ -3030,7 +3168,7 @@
 
       if (includeGroup && studentGroup) {
         lines.push("");
-        lines.push(`@ He's Student of ${studentGroup}'s Group.`);
+        lines.push(`@Mustafa Shab He's Student of ${studentGroup}'s Group.`);
       }
 
       const text = lines.join("\n");
@@ -3406,6 +3544,8 @@
           m: () => addEntry("mistake"),
           u: () => addEntry("stuck"),
           d: toggleDark,
+          n: toggleSavedMsgs,
+          t: cycleTheme,
         };
         const fn = altMap[e.key.toLowerCase()];
         if (fn) { e.preventDefault(); fn(); }
@@ -3430,6 +3570,48 @@
       t.textContent = msg; t.classList.add("show");
       setTimeout(() => t.classList.remove("show"), 2500);
     }
+
+    /* ══════════════════════════════════════════
+       ANDROID BACK BUTTON — double-back to exit
+    ══════════════════════════════════════════ */
+    (function setupBackHandler() {
+      /* Push a dummy state so the first back press stays in-app */
+      history.pushState({ sprNote: true }, "");
+
+      let backPressedOnce = false;
+      let backTimer = null;
+
+      window.addEventListener("popstate", (e) => {
+        /* If settings modal is open, close it first */
+        const modal = $("settings-modal");
+        if (modal && modal.classList.contains("open")) {
+          closeSettings();
+          history.pushState({ sprNote: true }, "");
+          return;
+        }
+        /* If any dropdown is open, close it */
+        const smDd = $("sm-dropdown");
+        const csDd = $("cs-dropdown");
+        if ((smDd && smDd.classList.contains("open")) || (csDd && csDd.classList.contains("open"))) {
+          smDd && smDd.classList.remove("open");
+          csDd && csDd.classList.remove("open");
+          $("cs-btn") && $("cs-btn").classList.remove("active");
+          history.pushState({ sprNote: true }, "");
+          return;
+        }
+        /* Otherwise handle double-back-to-exit */
+        if (backPressedOnce) {
+          /* Second press — allow the app to close */
+          clearTimeout(backTimer);
+          return; /* Let the browser navigate back/close */
+        }
+        /* First press */
+        backPressedOnce = true;
+        history.pushState({ sprNote: true }, ""); /* Stay in app */
+        toast("Press back again to exit");
+        backTimer = setTimeout(() => { backPressedOnce = false; }, 2500);
+      });
+    })();
 
     /* ── START APP ── */
     init();
