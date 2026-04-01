@@ -39,6 +39,8 @@
       --radius-xs: 4px;
       --card-stripe: var(--primary);
     }
+    /* ─────────────────────────────────────────────
+       THEME VARIABLES — Classic Green DARK
     ───────────────────────────────────────────── */
     [data-theme="classic"][data-dark="1"] {
       --bg: #0e1a12;
@@ -574,7 +576,8 @@
        JUZ MULTI-ROW INPUT
     ───────────────────────────────────────────── */
     .juz-multi-wrap { flex: 1; display: flex; flex-direction: column; gap: 6px; }
-    .juz-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .juz-row { display: flex; align-items: flex-start; gap: 6px; flex-wrap: nowrap; }
+    .juz-row-inner { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; flex: 1; min-width: 0; }
     .juz-row-label { font-size: 11px; color: var(--text-muted); font-weight: 700; min-width: 24px; }
     .juz-num-input {
       width: 56px; text-align: center;
@@ -588,8 +591,8 @@
     .juz-num-input:focus { border-color: var(--border-focus); background: var(--surface); box-shadow: 0 0 0 2px rgba(26,92,56,.1); }
     .juz-num-input::-webkit-inner-spin-button,
     .juz-num-input::-webkit-outer-spin-button { -webkit-appearance: none; }
-    .juz-page-tabs { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-    .juz-page-tab { display: flex; align-items: center; gap: 4px; }
+    .juz-page-tabs { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; row-gap: 6px; }
+    .juz-page-tab { display: inline-flex; align-items: center; gap: 4px; }
     .juz-page-sep { font-size: 12px; color: var(--text-light); }
     /* Page range input within juz row */
     .page-tab-input {
@@ -743,6 +746,7 @@
       padding: 5px 5px;
       border-radius: var(--radius-sm);
       flex-wrap: wrap;
+      row-gap: 6px;
       position: relative;
       animation: entryIn .18s ease;
     }
@@ -763,8 +767,8 @@
     .e-input::-webkit-outer-spin-button { -webkit-appearance: none; }
     .e-input:focus { border-color: var(--border-focus); background: var(--surface); box-shadow: 0 0 0 2px rgba(26,92,56,.1); }
 
-    .ayah-wrap { display: flex; align-items: center; gap: 3px; flex-wrap: wrap; }
-    .ayah-group { display: inline-flex; align-items: center; gap: 2px; }
+    .ayah-wrap { display: flex; align-items: center; gap: 3px; flex-wrap: wrap; row-gap: 4px; }
+    .ayah-group { display: inline-flex; align-items: center; gap: 2px; flex-shrink: 0; }
     .ayah-comma { font-size: 13px; color: var(--text-muted); }
 
     /* Delete button on entry row (shows on hover) */
@@ -1101,13 +1105,17 @@
     ───────────────────────────────────────────── */
     .edit-inline-wrap {
       display: flex; gap: 6px; align-items: center;
+      flex-wrap: wrap;
       padding: 4px 8px;
       background: var(--primary-light);
       border-radius: var(--radius-xs);
       margin: 2px 0;
+      min-width: 0;
+      overflow: hidden;
     }
     .edit-inline-input {
-      flex: 1; border: 1.5px solid var(--border-focus);
+      flex: 1; min-width: 80px;
+      border: 1.5px solid var(--border-focus);
       border-radius: 4px; padding: 4px 8px;
       font-size: 13px; outline: none;
       font-family: "DM Sans", sans-serif;
@@ -1118,6 +1126,7 @@
       border: none; border-radius: 4px;
       padding: 4px 10px; font-size: 12px;
       cursor: pointer; font-family: "DM Sans", sans-serif;
+      flex-shrink: 0;
     }
     .edit-inline-btn.cancel { background: var(--bg2); color: var(--text-muted); }
 
@@ -1403,8 +1412,9 @@
       margin-bottom: 12px;
       border: 1.5px solid var(--border);
       border-radius: var(--radius-sm);
-      overflow: hidden;
+      overflow: visible;
       background: var(--surface);
+      min-width: 0;
     }
     .sgroup-header {
       display: flex; align-items: center; justify-content: space-between;
@@ -1511,6 +1521,8 @@
       border-radius: var(--radius-sm) !important;
       border: 1px solid transparent;
       margin-bottom: 2px;
+      min-width: 0;
+      overflow: hidden;
     }
     .settings-item:hover {
       background: var(--bg) !important;
@@ -1573,8 +1585,9 @@
       .field-input { font-size: 13px; padding: 7px 9px; }
 
       /* Juz row */
-      .juz-row { gap: 4px; flex-wrap: wrap; }
-      .juz-num-input { width: 50px; font-size: 13px; padding: 6px 5px; }
+      .juz-row { gap: 4px; flex-wrap: nowrap; align-items: flex-start; }
+      .juz-row-inner { gap: 4px; flex-wrap: wrap; }
+      .juz-num-input { width: 50px; font-size: 13px; padding: 6px 5px; flex-shrink: 0; }
       .juz-page-tabs { flex-wrap: wrap; gap: 4px; }
       .page-dual-drum { width: 30px; font-size: 12px; }
       .page-dual-box { height: 30px; }
@@ -2059,7 +2072,7 @@
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
           </a>
         </div>
-        <div class="settings-footer-copy">© <span id="settings-copy-year"></span> SPR Note · v13.0</div>
+        <div class="settings-footer-copy">&copy; <span id="settings-copy-year"></span> SPR Note &middot; v15.0</div>
       </div>
     </div>
   </div>
@@ -2128,7 +2141,8 @@
     ══════════════════════════════════════════ */
     function loadStorage() {
       try {
-        const d = JSON.parse(localStorage.getItem("spr-v4") || "{}");
+        const raw = localStorage.getItem("spr-v4") || localStorage.getItem("data") || "{}";
+        const d = JSON.parse(raw);
         if (d.timezone)  S.timezone = d.timezone;
         if (d.theme)     S.theme    = d.theme;
         if (typeof d.dark === "number") S.dark = d.dark;
@@ -2141,7 +2155,7 @@
     }
 
     function persist() {
-      localStorage.setItem("spr-v4", JSON.stringify({
+      const payload = JSON.stringify({
         timezone:      S.timezone,
         theme:         S.theme,
         dark:          S.dark,
@@ -2149,7 +2163,9 @@
         savedNames:    S.savedNames,
         savedSessions: S.savedSessions,
         savedComments: S.savedComments,
-      }));
+      });
+      localStorage.setItem("spr-v4", payload);
+      localStorage.setItem("data", payload);
     }
 
     /* ══════════════════════════════════════════
@@ -2285,8 +2301,13 @@
         delBtn.addEventListener("click", () => removeJuzRow(idx));
         delBtn.style.display = juzRows.length > 1 ? "" : "none";
 
-        rowEl.appendChild(juzInp);
-        rowEl.appendChild(pageTabs);
+        /* Inner wrapper: juz input + page tabs wrap together */
+        const inner = document.createElement("div");
+        inner.className = "juz-row-inner";
+        inner.appendChild(juzInp);
+        inner.appendChild(pageTabs);
+
+        rowEl.appendChild(inner);
         rowEl.appendChild(delBtn);
         wrap.appendChild(rowEl);
 
@@ -2324,24 +2345,8 @@
           juzRows[idx].pages[pIdx].end   = end;
         });
 
-        /* Tab from end drum → next box or add new */
+        /* Tab from end drum → natural browser tab order (no new page range on Tab) */
         box._endDrum.addEventListener("keydown", (e) => {
-          if (e.key === "Tab" && !e.shiftKey) {
-            e.preventDefault();
-            const allBoxes = [...pageTabs.querySelectorAll(".page-dual-box")];
-            const curBoxIdx = allBoxes.indexOf(box);
-            if (curBoxIdx + 1 < allBoxes.length) {
-              allBoxes[curBoxIdx + 1]._startDrum?.focus();
-            } else {
-              juzRows[idx].pages.push({ start: "", end: "" });
-              renderJuzPageTabs(idx);
-              setTimeout(() => {
-                const newBoxes = $(`juz-page-tabs-${idx}`).querySelectorAll(".page-dual-box");
-                newBoxes[newBoxes.length - 1]?._startDrum?.focus?.() ||
-                  newBoxes[newBoxes.length - 1]?.querySelector("input")?.focus();
-              }, 20);
-            }
-          }
           if (e.key === "Backspace" && !box._endDrum.value && !box._startDrum.value && row.pages.length > 1) {
             e.preventDefault();
             juzRows[idx].pages.splice(pIdx, 1);
@@ -2838,7 +2843,7 @@
             rem[Math.max(0, idx - 1)]?.querySelector("input")?.focus();
           }
         }
-        if (e.key === "Tab" && !e.shiftKey) { e.preventDefault(); focusAyah(row); }
+        /* Tab: natural browser tab order — no override needed */
       });
 
       const ayahWrap = document.createElement("div");
@@ -2863,11 +2868,22 @@
 
       row.appendChild(juzLbl);
       row.appendChild(juzSel);
-      row.appendChild(mkSpan("entry-lbl", "Page"));
-      row.appendChild(pageInp);
-      row.appendChild(mkSpan("entry-lbl", "Ayah"));
-      row.appendChild(ayahWrap);
-      row.appendChild(ayahPlusBtn);
+
+      /* Page group — label + input stay together */
+      const pageGroup = document.createElement("span");
+      pageGroup.style.cssText = "display:inline-flex;align-items:center;gap:5px;flex-shrink:0;";
+      pageGroup.appendChild(mkSpan("entry-lbl", "Page"));
+      pageGroup.appendChild(pageInp);
+      row.appendChild(pageGroup);
+
+      /* Ayah group — label + wrap stay together, can expand */
+      const ayahGroup = document.createElement("span");
+      ayahGroup.style.cssText = "display:inline-flex;align-items:center;gap:5px;flex:1;min-width:0;flex-wrap:wrap;row-gap:4px;";
+      ayahGroup.appendChild(mkSpan("entry-lbl", "Ayah"));
+      ayahGroup.appendChild(ayahWrap);
+      ayahGroup.appendChild(ayahPlusBtn);
+      row.appendChild(ayahGroup);
+
       row.appendChild(delBtn);
       list.appendChild(row);
 
@@ -2917,10 +2933,7 @@
       }, { passive: false });
       inp.addEventListener("keydown", (e) => {
         if (e.key === "Tab" && !e.shiftKey) {
-          e.preventDefault();
-          addAyahInput(type, ayahWrap, true);
-          const all = ayahWrap.querySelectorAll("input");
-          all[all.length - 1]?.focus();
+          /* Natural tab — do NOT add new ayah, let browser handle tab order */
         } else if (e.key === "Enter") {
           e.preventDefault(); addEntry(type);
         } else if (e.key === "Backspace" && !inp.value) {
@@ -3401,8 +3414,8 @@
         `<option value="${g}" ${g === n.group ? "selected" : ""}>${g}</option>`
       ).join("");
       item.innerHTML = `<div class="edit-inline-wrap" style="flex:1;gap:4px">
-        <input class="edit-inline-input" id="edit-name-inp" value="${n.name}" placeholder="Name" style="flex:1">
-        <select class="edit-inline-input" id="edit-group-inp" style="width:130px">
+        <input class="edit-inline-input" id="edit-name-inp" value="${n.name}" placeholder="Name" style="flex:1;min-width:80px">
+        <select class="edit-inline-input" id="edit-group-inp" style="min-width:100px;max-width:140px;flex:1">
           <option value="">— Group —</option>${groupOpts}
         </select>
         <button class="edit-inline-btn" onclick="saveEditName(${i})"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button>
